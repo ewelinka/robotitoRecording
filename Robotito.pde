@@ -2,7 +2,7 @@ class Robotito {
   int ypos, xpos, speed, size, directionX, directionY, ledSize, activeDirection;
   color colorRobotito, lastColor;
   float ledDistance;
-  boolean recording, reproducing;
+  boolean recording, reproducing, isSelected;
   ArrayList<ColorDuration> recordingList;
   int reproductionStart, reproductionIndex;
   ColorDuration actionToReproduce;
@@ -18,6 +18,7 @@ class Robotito {
     lastColor = white;
     recording = false;
     reproducing = false;
+    isSelected = false;
     recordingList = new ArrayList<ColorDuration>();
   }
   void update() {
@@ -71,7 +72,7 @@ class Robotito {
   }
   void drawRobotito() {
     fill(colorRobotito);
-    stroke(185);
+    stroke(strokeColor);
     circle(xpos, ypos, size);
     fill(255);
     noStroke();
@@ -83,11 +84,11 @@ class Robotito {
   }
   void draw4lights() {
     // 4 lights
+    stroke(strokeColor);
     // green light
     pushMatrix();
     translate(0, -ledDistance);
     fill(green);
-    stroke(185);
     circle(0, 0, ledSize);
     popMatrix();
     // red light
@@ -95,7 +96,6 @@ class Robotito {
     rotate(radians(180));
     translate(0, -ledDistance);
     fill(red);
-    stroke(185);
     circle(0, 0, ledSize);
     popMatrix();
     //yellow
@@ -103,7 +103,6 @@ class Robotito {
     rotate(radians(90));
     translate(0, -ledDistance);
     fill(yellow);
-    stroke(185);
     circle(0, 0, ledSize);
     popMatrix();
     //blue
@@ -111,7 +110,6 @@ class Robotito {
     rotate(radians(270));
     translate(0, -ledDistance);
     fill(blue);
-    stroke(185);
     circle(0, 0, ledSize);
     popMatrix();
   }
@@ -151,14 +149,12 @@ class Robotito {
     rotate(radians(rotation)-radians(360/24));
     translate(0, -ledDistance);
     fill(ledArcColor);
-    stroke(185);
     circle(0, 0, ledSize);
     popMatrix();
     pushMatrix();
     rotate(radians(rotation)-radians(360/24)*2);
     translate(0, -ledDistance);
     fill(ledArcColor);
-    stroke(185);
     circle(0, 0, ledSize);
     popMatrix();
     if (recording) {
@@ -262,7 +258,7 @@ class Robotito {
     processColorAndIdTEST(actionToReproduce.col);
   }
 
-  boolean isPointInside(int x, int y) {
-    return x >= xpos-size/2 && x <= xpos+size/2 && y >= ypos-size/2 && y <= ypos+size/2;
+  void setIsSelected(boolean is) {
+    isSelected = is;
   }
 }

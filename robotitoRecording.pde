@@ -38,7 +38,7 @@ void setup() {
   offsetSensing = cardSize/2;
   ignoredId = -1;
   strokeThickness = 4;
-  strokeColor = 100;
+  strokeColor = 185;
   allCards = new ArrayList<Card>();
   initWithCards();
 }
@@ -55,6 +55,14 @@ void draw() {
 
 void mousePressed() {
   boolean foundOne = false;
+  if (dist(robotito.xpos, robotito.ypos, mouseX, mouseY) < robotito.size/2)
+  {
+    robotito.setIsSelected(true);
+    foundOne = true;
+  }else{
+    robotito.setIsSelected(false);
+  }
+  
   for (int i = allCards.size()-1; i >= 0; i--) {
     Card currentCard = allCards.get(i);
     if (currentCard.isPointInside(mouseX, mouseY) && !foundOne) {
@@ -72,7 +80,7 @@ void mouseDragged() {
       currentCard.updatePosition(mouseX, mouseY);
     }
   }
-  if (dist(robotito.xpos, robotito.ypos, mouseX, mouseY) < robotito.size/2)
+  if ((dist(robotito.xpos, robotito.ypos, mouseX, mouseY) < robotito.size/2) && robotito.isSelected)
   {
     robotito.updatePosition(mouseX, mouseY);
   }
