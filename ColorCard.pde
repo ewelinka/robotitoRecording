@@ -11,15 +11,15 @@ class ColorCard extends Card {
   }
 
   void addToBackground() {
-    back.beginDraw();
-    back.fill(cardColor);
+  
+    fill(cardColor);
     if (isSelected) {
-      back.stroke(markerColor);
-      back.strokeWeight(strokeThickness);
+      stroke(markerColor);
+      strokeWeight(strokeThickness);
     } else {
-      back.noStroke();
+      noStroke();
     }
-    back.rect(xpos, ypos, cardSize, cardSize);
-    back.endDraw();
+    rect(xpos, ypos, cardSize, cardSize);
+    strokeWeight(1);
   }
 }

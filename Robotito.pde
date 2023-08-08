@@ -46,11 +46,11 @@ class Robotito {
       int offsetX = directionX*offsetSensing*-1;
       int offsetY = directionY*offsetSensing*-1;
      // boolean awayFromCards = true; // will be used to undo ignoredId and allow to repeat violet
-      for (Card currentCard : allCards) {
+      for (ColorCard currentCard : allCards) {
         if (currentCard.isPointInside(xpos+offsetX, ypos+offsetY)) {
         //  awayFromCards = false;
           if (currentCard.id != ignoredId) {
-            processColorAndId(back.get(xpos+offsetX, ypos+offsetY), currentCard.id);
+            processColorAndId(currentCard.cardColor , currentCard.id);
           }
         }
       }
@@ -176,6 +176,7 @@ class Robotito {
 
   void processColorAndId(color currentColor, int id) {
     if (currentColor == green || currentColor == yellow || currentColor == red || currentColor == blue || currentColor == violet) {
+      print(frameRate);
       if (currentColor == violet) { // 3 options: start to record, finish to record, use the function
         if (!recording && recordingList.isEmpty()) { // we should start to record!
           recording  = true;
