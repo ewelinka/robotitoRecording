@@ -1,3 +1,13 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+Minim minim;
+AudioOutput out;
+
 Robotito robotito;
 
 color cardColor, yellow, blue, green, red, white, markerColor, violet;
@@ -38,6 +48,11 @@ void setup() {
   strokeColor = 185;
   allCards = new ArrayList<ColorCard>();
   initWithCards();
+  
+  // musical part
+  minim = new Minim(this);
+  // use the getLineOut method of the Minim object to get an AudioOutput object
+  out = minim.getLineOut();
 }
 
 void draw() {

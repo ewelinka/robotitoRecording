@@ -158,7 +158,7 @@ class Robotito {
     circle(0, 0, ledSize);
     popMatrix();
     if (recording) {
-      if ((frameCount - frameOffset)%60 == 0) {
+      if ((frameCount - frameOffset)%45 == 0) {
         showRecordingLights = !showRecordingLights;
       }
       if (showRecordingLights) {
@@ -213,6 +213,7 @@ class Robotito {
       if (currentColor == violet) { // 3 options: start to record, finish to record, use the function
         if (!recording && recordingList.isEmpty()) { // we should start to record!
           recording  = true;
+          playRecordingStart();
           // registr the active color and start to count
           int currentTimestamp = millis();
           recordingList.add(new ColorDuration(lastColor, currentTimestamp));
@@ -220,6 +221,7 @@ class Robotito {
         } else if (recording) {// finish to record, update last color duration
           recording = false;
           record(white, true); //last!
+          playRecordingStop();
           println("RECORDING READY");
         } else { // recording is false but the list is not empty!
           //use the power!!
@@ -295,5 +297,18 @@ class Robotito {
 
   void setIsSelected(boolean is) {
     isSelected = is;
+  }
+
+  void playRecordingStart() {
+    out.playNote(0, 0.1, 200);
+    out.playNote(0.1, 0.1, 300);
+    out.playNote(0.2, 0.1, 500);
+    out.playNote(0.3, 0.1, 800);
+  }
+  void playRecordingStop() {
+    out.playNote(0, 0.1, 800);
+    out.playNote(0.1, 0.1, 500);
+    out.playNote(0.2, 0.1, 300);
+    out.playNote(0.3, 0.1, 200);
   }
 }
