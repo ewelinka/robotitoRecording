@@ -54,9 +54,6 @@ class Robotito {
           }
         }
       }
-      //if (awayFromCards){
-      //  ignoredId = -1;
-      //}
     }
   }
   void drawRobotitoAndLights() {
@@ -221,7 +218,7 @@ class Robotito {
     }
   }
 
-  void processColorAndIdTEST(color currentColor) {
+  void processColorAndIdFromRecorded(color currentColor) {
     println(" PROCESSING RECORDED " +colorToName(currentColor)+" duration "+actionToReproduce.duration);
     if (currentColor == green) {
       directionY = -1;
@@ -256,7 +253,7 @@ class Robotito {
     reproductionIndex = index;
     reproductionStart = millis();
     actionToReproduce = recordingList.get(reproductionIndex);
-    processColorAndIdTEST(actionToReproduce.col);
+    processColorAndIdFromRecorded(actionToReproduce.col);
   }
 
   void setIsSelected(boolean is) {

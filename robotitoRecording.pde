@@ -153,25 +153,25 @@ void initWithCards() {
 void checkIfNewCardNeeded() {
   int x = 0 + cardSize/2 + 10;
   int y = height - cardSize/2 -10;
-  //if (back.get(x, y) != green) {
-  //  allCards.add(new ColorCard(x, y, cardSize, green));
-  //}
-  //x = x + cardSize + 10;
-  //if (back.get(x, y) != red) {
-  //  allCards.add(new ColorCard(x, y, cardSize, red));
-  //}
-  //x = x + cardSize + 10;
-  //if (back.get(x, y) != yellow) {
-  //  allCards.add(new ColorCard(x, y, cardSize, yellow));
-  //}
-  //x = x + cardSize + 10;
-  //if (back.get(x, y) != blue) {
-  //  allCards.add(new ColorCard(x, y, cardSize, blue));
-  //}
-  //x = x + cardSize + 10;
-  //if (back.get(x, y) != violet) {
-  //  allCards.add(new ColorCard(x, y, cardSize, violet));
-  //}
+  if (get(x, y) != green) {
+    allCards.add(new ColorCard(x, y, cardSize, green));
+  }
+  x = x + cardSize + 10;
+  if (get(x, y) != red) {
+    allCards.add(new ColorCard(x, y, cardSize, red));
+  }
+  x = x + cardSize + 10;
+  if (get(x, y) != yellow) {
+    allCards.add(new ColorCard(x, y, cardSize, yellow));
+  }
+  x = x + cardSize + 10;
+  if (get(x, y) != blue) {
+    allCards.add(new ColorCard(x, y, cardSize, blue));
+  }
+  x = x + cardSize + 10;
+  if (get(x, y) != violet) {
+    allCards.add(new ColorCard(x, y, cardSize, violet));
+  }
 }
 
 String colorToName(int colorNow) {
