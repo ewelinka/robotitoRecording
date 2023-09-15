@@ -2,9 +2,10 @@ class Robotito {
   int ypos, xpos, speed, size, directionX, directionY, ledSize, activeDirection;
   color colorRobotito, lastColor;
   float ledDistance;
-  boolean recording, reproducing, isSelected;
+  boolean recording, reproducing, isSelected, showRecordingLights;
   ArrayList<ColorDuration> recordingList;
   int reproductionStart, reproductionIndex;
+  int frameOffset;
   ColorDuration actionToReproduce;
   Robotito (int x, int y) {
     xpos = x;
@@ -18,8 +19,10 @@ class Robotito {
     lastColor = white;
     recording = false;
     reproducing = false;
+    frameOffset = 0;
     isSelected = false;
     recordingList = new ArrayList<ColorDuration>();
+    showRecordingLights = false;
   }
   void update() {
     xpos += speed*directionX;
@@ -45,12 +48,12 @@ class Robotito {
       // calculate offset necesary to change direction in the middle of the card depending direction
       int offsetX = directionX*offsetSensing*-1;
       int offsetY = directionY*offsetSensing*-1;
-     // boolean awayFromCards = true; // will be used to undo ignoredId and allow to repeat violet
+      // boolean awayFromCards = true; // will be used to undo ignoredId and allow to repeat violet
       for (ColorCard currentCard : allCards) {
         if (currentCard.isPointInside(xpos+offsetX, ypos+offsetY)) {
-        //  awayFromCards = false;
+          //  awayFromCards = false;
           if (currentCard.id != ignoredId) {
-            processColorAndId(currentCard.cardColor , currentCard.id);
+            processColorAndId(currentCard.cardColor, currentCard.id);
           }
         }
       }
@@ -155,6 +158,24 @@ class Robotito {
     circle(0, 0, ledSize);
     popMatrix();
     if (recording) {
+      if ((frameCount - frameOffset)%60 == 0) {
+        showRecordingLights = !showRecordingLights;
+      }
+      if (showRecordingLights) {
+        pushMatrix();
+        rotate(radians(rotation)+radians(360/24)*3);
+        translate(0, -ledDistance);
+        fill(violet);
+        circle(0, 0, ledSize);
+        popMatrix();
+        pushMatrix();
+        rotate(radians(rotation)-radians(360/24)*3);
+        translate(0, -ledDistance);
+        fill(violet);
+        circle(0, 0, ledSize);
+        popMatrix();
+      }
+    } else if (reproducing) {
       pushMatrix();
       rotate(radians(rotation)+radians(360/24)*3);
       translate(0, -ledDistance);
@@ -163,6 +184,21 @@ class Robotito {
       popMatrix();
       pushMatrix();
       rotate(radians(rotation)-radians(360/24)*3);
+      translate(0, -ledDistance);
+      fill(violet);
+      circle(0, 0, ledSize);
+      popMatrix();
+    } else if (!recording && !recordingList.isEmpty()) { // not recording but with some actiones stored
+      // lights that indicate that we recorded something
+      // draw4violet();
+    }
+  }
+
+  void draw4violet() {
+    stroke(strokeColor);
+    for (int i = 0; i<4; i++) {
+      pushMatrix();
+      rotate(radians(90*i)+ radians(360/24)*3);
       translate(0, -ledDistance);
       fill(violet);
       circle(0, 0, ledSize);
@@ -189,6 +225,7 @@ class Robotito {
           //use the power!!
           println("USE THE POWER");
           reproducing = true;
+          frameOffset = frameCount - floor(frameCount/100)*100;
           startActionReproduction(0);
         }
       } else {
