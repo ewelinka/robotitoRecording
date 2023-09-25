@@ -53,7 +53,7 @@ class Robotito { //<>// //<>//
       for (ColorCard currentCard : allCards) {
         if (currentCard.isPointInside(xpos+offsetX, ypos+offsetY)) {
           //  awayFromCards = false;
-          if (currentCard.id != ignoredId && !mousePressed) { // !mousePressed to avoid color detection while dragging
+          if (currentCard.id != ignoredId && !isSelected) { // !mousePressed to avoid color detection while dragging
             processColorAndId(currentCard.cardColor, currentCard.id);
           }
         }

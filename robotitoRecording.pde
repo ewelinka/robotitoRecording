@@ -37,7 +37,6 @@ void setup() {
   white = #FFFFFF;
   markerColor = #000000;
   violet = #A20FFF;
-
   cardColor = green;
   cardSize = 100;
   puttingCards = true;
@@ -63,6 +62,10 @@ void draw() {
   }
   robotito.drawRobotitoAndLights();
   checkIfNewCardNeeded();
+}
+
+void mouseReleased(){
+  robotito.setIsSelected(false);
 }
 
 void mousePressed() {
