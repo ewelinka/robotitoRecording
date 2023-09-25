@@ -1,4 +1,4 @@
-class Robotito {
+class Robotito { //<>// //<>//
   int ypos, xpos, speed, size, directionX, directionY, ledSize, activeDirection;
   color colorRobotito, lastColor;
   float ledDistance;
@@ -27,6 +27,7 @@ class Robotito {
   void update() {
     xpos += speed*directionX;
     ypos += speed*directionY;
+
     if ((ypos > height) || (ypos < 0)) {
       directionY = 0;
     }
@@ -52,7 +53,7 @@ class Robotito {
       for (ColorCard currentCard : allCards) {
         if (currentCard.isPointInside(xpos+offsetX, ypos+offsetY)) {
           //  awayFromCards = false;
-          if (currentCard.id != ignoredId) {
+          if (currentCard.id != ignoredId && !mousePressed) { // !mousePressed to avoid color detection while dragging
             processColorAndId(currentCard.cardColor, currentCard.id);
           }
         }
@@ -66,7 +67,16 @@ class Robotito {
     drawDirectionLights();
   }
 
-  void updatePosition(int x, int y) {
+  void updatePositionDragged(int x, int y) {
+    if (!reproducing) {
+      directionX = 0;
+      directionY = 0;
+      activeDirection = 0;
+    }
+    if (recording) {
+      recording = false;
+      recordingList = new ArrayList<ColorDuration>();
+    }
     xpos = x;
     ypos = y;
   }
@@ -194,6 +204,7 @@ class Robotito {
     }
   }
 
+  // won't be used as it looks strange
   void draw4violet() {
     stroke(strokeColor);
     for (int i = 0; i<4; i++) {
@@ -208,8 +219,8 @@ class Robotito {
 
 
   void processColorAndId(color currentColor, int id) {
+
     if (currentColor == green || currentColor == yellow || currentColor == red || currentColor == blue || currentColor == violet) {
-      print(frameRate);
       if (currentColor == violet) { // 3 options: start to record, finish to record, use the function
         if (!recording && recordingList.isEmpty()) { // we should start to record!
           recording  = true;

@@ -94,7 +94,7 @@ void mouseDragged() {
   }
   if ((dist(robotito.xpos, robotito.ypos, mouseX, mouseY) < robotito.size/2) && robotito.isSelected)
   {
-    robotito.updatePosition(mouseX, mouseY);
+    robotito.updatePositionDragged(mouseX, mouseY);
   }
 }
 void keyPressed() {
