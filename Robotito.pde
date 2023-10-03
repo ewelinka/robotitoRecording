@@ -1,5 +1,5 @@
 class Robotito { //<>// //<>//
-  int ypos, xpos, speed, size, directionX, directionY, ledSize, activeDirection;
+  int ypos, xpos, speed, size, directionX, directionY, ledSize, activeDirection, arrowSize, arrowShift;
   color colorRobotito, lastColor;
   float ledDistance;
   boolean recording, reproducing, isSelected, showRecordingLights;
@@ -14,6 +14,8 @@ class Robotito { //<>// //<>//
     size = 100;
     ledSize= 5;
     ledDistance = size*0.52/2-ledSize/2;
+    arrowSize = 14;
+    arrowShift = 9;
     directionX = directionY = activeDirection = 0;
     colorRobotito = #FCB603;
     lastColor = white;
@@ -63,7 +65,8 @@ class Robotito { //<>// //<>//
   void drawRobotitoAndLights() {
     drawRobotito();
     translate(xpos, ypos);
-    draw4lights();
+    //draw4lights();
+    drawArrows();
     drawDirectionLights();
   }
 
@@ -79,6 +82,7 @@ class Robotito { //<>// //<>//
     }
     xpos = x;
     ypos = y;
+    ignoredId = -1;
   }
   void drawRobotito() {
     fill(colorRobotito);
@@ -110,37 +114,84 @@ class Robotito { //<>// //<>//
     popMatrix();
     //yellow
     pushMatrix();
-    rotate(radians(90));
+    rotate(radians(270));
     translate(0, -ledDistance);
     fill(yellow);
     circle(0, 0, ledSize);
     popMatrix();
     //blue
     pushMatrix();
-    rotate(radians(270));
+    rotate(radians(90));
     translate(0, -ledDistance);
     fill(blue);
     circle(0, 0, ledSize);
     popMatrix();
   }
+  void drawArrows() {
+    pushMatrix();
+    translate(0, -ledDistance - arrowShift);
+    fill(green);
+    drawArrow(arrowSize);
+    popMatrix();
+    // red light
+    pushMatrix();
+    rotate(radians(180));
+    translate(0, -ledDistance - arrowShift);
+    fill(red);
+    drawArrow(arrowSize);
+    popMatrix();
+    //yellow
+    pushMatrix();
+    rotate(radians(270));
+    translate(0, -ledDistance - arrowShift);
+    fill(yellow);
+    drawArrow(arrowSize);
+    popMatrix();
+    //blue
+    pushMatrix();
+    rotate(radians(90));
+    translate(0, -ledDistance - arrowShift);
+    fill(blue);
+    drawArrow(arrowSize);
+    popMatrix();
+  }
+  void drawArrow(int aSize) {
+    int triangleSize = 8;
+    triangle(0, -aSize, triangleSize/2, -aSize+triangleSize, -triangleSize/2, -aSize+triangleSize);
+    // CENTER MODE!!
+    rect(0, 0-(aSize-triangleSize)/2, triangleSize/2, (aSize-triangleSize));
+  }
+
   void drawDirectionLights() {
     switch(activeDirection) {
+    case 0: //draw recorded if we have
+      if (recordingList.size()>0) {
+        drawRecorded();
+      }
+      break;
     case 1: // green
       drawArc(0, green);
       break;
-    case 2: // yellow
-      drawArc(90, yellow);
+    case 2: // blue
+      drawArc(90, blue);
       break;
     case 3: // red
       drawArc(180, red);
       break;
-    case 4: // blue
-      drawArc(270, blue);
+    case 4: // yellow
+      drawArc(270, yellow);
       break;
     }
   }
 
   void drawArc(int rotation, color ledArcColor) {
+    pushMatrix();
+    rotate(radians(rotation));
+    translate(0, -ledDistance);
+    fill(ledArcColor);
+    stroke(strokeColor);
+    circle(0, 0, ledSize);
+    popMatrix();
     pushMatrix();
     rotate(radians(rotation) + radians(360/24));
     translate(0, -ledDistance);
@@ -217,6 +268,31 @@ class Robotito { //<>// //<>//
     }
   }
 
+  void drawRecorded() {
+    // first led indicating recording start
+    pushMatrix();
+    translate(0, -ledDistance);
+    fill(violet);
+    circle(0, 0, ledSize);
+    popMatrix();
+    int numberOfRecorded = recordingList.size();
+    for (int i = 0; i<numberOfRecorded; i++) {
+      pushMatrix();
+      rotate(radians(360/24*(i+1)));
+      translate(0, -ledDistance);
+      fill(recordingList.get(i).getColor());
+      circle(0, 0, ledSize);
+      popMatrix();
+    }
+    // last led indicating recording end
+    pushMatrix();
+    rotate(radians(360/24*(numberOfRecorded+1)));
+    translate(0, -ledDistance);
+    fill(violet);
+    circle(0, 0, ledSize);
+    popMatrix();
+  }
+
 
   void processColorAndId(color currentColor, int id) {
 
@@ -249,7 +325,7 @@ class Robotito { //<>// //<>//
           directionY = -1;
           directionX = 0;
           activeDirection = 1;
-        } else if (currentColor == yellow) {
+        } else if (currentColor == blue) {
           directionY = 0;
           directionX = 1;
           activeDirection = 2;
@@ -257,7 +333,7 @@ class Robotito { //<>// //<>//
           directionY = 1;
           directionX = 0;
           activeDirection = 3;
-        } else if (currentColor == blue) {
+        } else if (currentColor == yellow) {
           directionY = 0;
           directionX = -1;
           activeDirection = 4;
@@ -274,7 +350,7 @@ class Robotito { //<>// //<>//
       directionY = -1;
       directionX = 0;
       activeDirection = 1;
-    } else if (currentColor == yellow) {
+    } else if (currentColor == blue) {
       directionY = 0;
       directionX = 1;
       activeDirection = 2;
@@ -282,7 +358,7 @@ class Robotito { //<>// //<>//
       directionY = 1;
       directionX = 0;
       activeDirection = 3;
-    } else if (currentColor == blue) {
+    } else if (currentColor == yellow) {
       directionY = 0;
       directionX = -1;
       activeDirection = 4;
